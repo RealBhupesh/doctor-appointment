@@ -62,6 +62,11 @@ def get_db_connection():
     return _DbConnection()
 
 
+def requires_postgres_on_vercel() -> bool:
+    """True if we're on Vercel and Postgres is required but not configured."""
+    return _IS_VERCEL and not _USE_POSTGRES
+
+
 # Schema for init - Postgres uses SERIAL, SQLite uses AUTOINCREMENT
 _SCHEMA_SQLITE = [
     """CREATE TABLE IF NOT EXISTS users (

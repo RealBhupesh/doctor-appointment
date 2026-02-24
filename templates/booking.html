@@ -4,9 +4,9 @@
 <section class="two-col">
   <div class="card">
     <h2>Book Appointment</h2>
-    <form method="POST" class="form-grid" id="booking-form">
+    <form method="POST" class="form-grid" id="booking-form" autocomplete="off">
       <label for="doctor_name">Doctor</label>
-      <select id="doctor_name" name="doctor_name" required>
+      <select id="doctor_name" name="doctor_name" required autocomplete="off">
         <option value="">Select doctor</option>
         {% for d in doctors %}
           <option value="{{ d.name }} ({{ d.specialty }})">{{ d.name }} ({{ d.specialty }})</option>

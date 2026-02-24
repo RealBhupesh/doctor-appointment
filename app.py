@@ -7,7 +7,7 @@ from functools import wraps
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from database import get_db_connection, init_schema
+from database import get_db_connection, init_schema, requires_postgres_on_vercel
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-change-me")
@@ -356,8 +356,18 @@ def _ensure_db_ready():
         raise
 
 
+@app.route("/setup-required")
+def setup_required():
+    """Shown when on Vercel without Postgres."""
+    return render_template("setup_required.html")
+
+
 @app.before_request
 def _before_request():
+    # Block all routes (except setup page and static) when Postgres is required but missing
+    if requires_postgres_on_vercel():
+        if request.endpoint not in (None, "setup_required", "static"):
+            return redirect(url_for("setup_required"))
     _ensure_db_ready()
 
 

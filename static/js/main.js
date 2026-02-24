@@ -5,6 +5,15 @@ document.addEventListener("DOMContentLoaded", () => {
     dateInput.min = today;
   }
 
+  // Reset doctor select after successful submit (prevents browser from reusing old value)
+  const bookingForm = document.querySelector("#booking-form");
+  if (bookingForm) {
+    const doctorSelect = bookingForm.querySelector("#doctor_name");
+    if (doctorSelect) {
+      doctorSelect.value = "";
+    }
+  }
+
   const flashStack = document.querySelector("#flash-stack");
   if (flashStack) {
     setTimeout(() => {
