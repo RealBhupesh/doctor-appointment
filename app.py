@@ -338,9 +338,27 @@ def update_appointment_status(appointment_id: int):
     return redirect(url_for("admin_dashboard"))
 
 
-init_db()
-ensure_default_admin()
-ensure_default_doctors()
+_db_initialized = False
+
+
+def _ensure_db_ready():
+    """Run DB init once, on first request. Catches errors so the app can load."""
+    global _db_initialized
+    if _db_initialized:
+        return
+    try:
+        init_db()
+        ensure_default_admin()
+        ensure_default_doctors()
+        _db_initialized = True
+    except Exception:
+        _db_initialized = False
+        raise
+
+
+@app.before_request
+def _before_request():
+    _ensure_db_ready()
 
 
 if __name__ == "__main__":

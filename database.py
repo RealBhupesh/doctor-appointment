@@ -5,6 +5,15 @@ import os
 
 _POSTGRES_URL = os.environ.get("POSTGRES_URL") or os.environ.get("DATABASE_URL")
 _USE_POSTGRES = bool(_POSTGRES_URL)
+_IS_VERCEL = os.environ.get("VERCEL") == "1"
+
+
+def _sqlite_path() -> str:
+    """Use /tmp on Vercel (read-only fs); project dir locally."""
+    if _IS_VERCEL:
+        return "/tmp/appointments.db"
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "appointments.db")
+
 
 if _USE_POSTGRES:
     import psycopg2
@@ -19,9 +28,7 @@ class _DbConnection:
             self._conn = psycopg2.connect(_POSTGRES_URL)
         else:
             import sqlite3
-            self._conn = sqlite3.connect(
-                os.path.join(os.path.dirname(os.path.abspath(__file__)), "appointments.db")
-            )
+            self._conn = sqlite3.connect(_sqlite_path())
             self._conn.row_factory = sqlite3.Row
 
     def _adapt(self, sql: str) -> str:
