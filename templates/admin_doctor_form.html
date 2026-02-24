@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit Doctor' if doctor else 'Add Doctor' }} | Book It{% endblock %}
+{% block content %}
+<section class="card auth-card">
+  <h2>{{ 'Edit Doctor' if doctor else 'Add Doctor' }}</h2>
+  <form method="POST" class="form-grid" style="margin-top: 1rem;">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text" value="{{ doctor.name if doctor else '' }}" placeholder="e.g. Dr. Smith" required />
+
+    <label for="specialty">Specialty</label>
+    <input id="specialty" name="specialty" type="text" value="{{ doctor.specialty if doctor else '' }}" placeholder="e.g. Cardiologist" required />
+
+    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+      <button class="btn" type="submit">{{ 'Update' if doctor else 'Add' }}</button>
+      <a class="btn btn-outline" href="{{ url_for('admin_doctors') }}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Home | Book It{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>Doctor Appointment Booking App</h1>
+    <p>
+      Book appointments in minutes. Patients can register, request slots, and track booking status.
+      Admin can review and manage all appointments.
+    </p>
+    <div class="hero-actions">
+      {% if session.get("user_id") %}
+        {% if session.get("is_admin") %}
+          <a class="btn" href="{{ url_for('admin_dashboard') }}">Open Admin Dashboard</a>
+        {% else %}
+          <a class="btn" href="{{ url_for('booking') }}">Book an Appointment</a>
+        {% endif %}
+      {% else %}
+        <a class="btn" href="{{ url_for('register') }}">Create Account</a>
+        <a class="btn btn-outline" href="{{ url_for('login') }}">Login</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="card stats-card">
+    <h3>Quick Stats</h3>
+    <p>Pending Requests: <strong>{{ stats.pending_count or 0 }}</strong></p>
+    <p>Approved Bookings: <strong>{{ stats.approved_count or 0 }}</strong></p>
+    <p class="small">Default admin: admin@clinic.com / admin123</p>
+  </div>
+</section>
+{% endblock %}

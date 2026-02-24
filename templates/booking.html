@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Booking | Book It{% endblock %}
+{% block content %}
+<section class="two-col">
+  <div class="card">
+    <h2>Book Appointment</h2>
+    <form method="POST" class="form-grid" id="booking-form">
+      <label for="doctor_name">Doctor</label>
+      <select id="doctor_name" name="doctor_name" required>
+        <option value="">Select doctor</option>
+        {% for d in doctors %}
+          <option value="{{ d.name }} ({{ d.specialty }})">{{ d.name }} ({{ d.specialty }})</option>
+        {% endfor %}
+      </select>
+      {% if not doctors %}
+        <p class="small" style="color: var(--warning);">No doctors available. Ask an admin to add doctors.</p>
+      {% endif %}
+
+      <label for="appointment_date">Date</label>
+      <input id="appointment_date" name="appointment_date" type="date" required />
+
+      <label for="appointment_time">Time</label>
+      <input id="appointment_time" name="appointment_time" type="time" required />
+
+      <label for="reason">Reason</label>
+      <textarea id="reason" name="reason" rows="3" placeholder="Briefly describe your issue" required></textarea>
+
+      <button class="btn" type="submit">Submit Request</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>My Appointments</h2>
+    {% if appointments %}
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Doctor</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in appointments %}
+              <tr>
+                <td>{{ item.appointment_date }}</td>
+                <td>{{ item.appointment_time }}</td>
+                <td>{{ item.doctor_name }}</td>
+                <td><span class="status status-{{ item.status }}">{{ item.status }}</span></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p>No appointments booked yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

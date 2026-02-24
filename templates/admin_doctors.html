@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Manage Doctors | Book It{% endblock %}
+{% block content %}
+<section class="card">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h2>Manage Doctors</h2>
+      <p class="small">Add, edit, or remove doctors. Patients select from this list when booking.</p>
+    </div>
+    <a class="btn" href="{{ url_for('admin_add_doctor') }}">Add Doctor</a>
+  </div>
+
+  {% if doctors %}
+    <div class="table-scroll" style="margin-top: 1rem;">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Specialty</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in doctors %}
+            <tr>
+              <td>{{ d.name }}</td>
+              <td>{{ d.specialty }}</td>
+              <td>
+                <a class="btn btn-small btn-outline" href="{{ url_for('admin_edit_doctor', doctor_id=d.id) }}">Edit</a>
+                <form method="POST" action="{{ url_for('admin_delete_doctor', doctor_id=d.id) }}" class="inline-form" style="display: inline-block;" onsubmit="return confirm('Remove this doctor? Existing appointments will keep their doctor name.');">
+                  <button class="btn btn-small" type="submit" style="background: var(--danger);">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p style="margin-top: 1rem;">No doctors yet. <a href="{{ url_for('admin_add_doctor') }}">Add the first doctor</a>.</p>
+  {% endif %}
+</section>
+{% endblock %}

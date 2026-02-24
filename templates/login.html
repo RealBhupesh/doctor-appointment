@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Login | Book It{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="card auth-card">
+    <h2>Login</h2>
+    <form method="POST" class="form-grid">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required />
+
+      <button class="btn" type="submit">Login</button>
+    </form>
+    <p class="small">
+      New user? <a href="{{ url_for('register') }}">Create an account</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

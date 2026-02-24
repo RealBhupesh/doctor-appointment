@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard | Book It{% endblock %}
+{% block content %}
+<section class="card">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h2>Admin Dashboard</h2>
+      <p class="small">Review all appointment requests and update their status.</p>
+    </div>
+    <a class="btn btn-outline" href="{{ url_for('admin_doctors') }}">Manage Doctors</a>
+  </div>
+
+  {% if appointments %}
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Email</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in appointments %}
+            <tr>
+              <td>{{ item.full_name }}</td>
+              <td>{{ item.email }}</td>
+              <td>{{ item.doctor_name }}</td>
+              <td>{{ item.appointment_date }}</td>
+              <td>{{ item.appointment_time }}</td>
+              <td>{{ item.reason }}</td>
+              <td><span class="status status-{{ item.status }}">{{ item.status }}</span></td>
+              <td>
+                <form method="POST" action="{{ url_for('update_appointment_status', appointment_id=item.id) }}" class="inline-form">
+                  <select name="status">
+                    <option value="pending" {% if item.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="approved" {% if item.status == 'approved' %}selected{% endif %}>Approved</option>
+                    <option value="cancelled" {% if item.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                    <option value="completed" {% if item.status == 'completed' %}selected{% endif %}>Completed</option>
+                  </select>
+                  <button class="btn btn-small" type="submit">Update</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>No appointment requests yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
